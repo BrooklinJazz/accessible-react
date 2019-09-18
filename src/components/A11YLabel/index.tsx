@@ -6,14 +6,24 @@ interface IProps extends React.HTMLAttributes<HTMLLabelElement> {
 }
 
 const A11YLabel = ({ children, label, ...labelProps }: IProps) => {
-  const labelledById: string = `${label} ${uuid()}`;
+  const labelledById: string = uuid();
+  const childId: string = uuid();
+  const otherProps = React.isValidElement(children) ? children.props : {};
   return (
     <React.Fragment>
-      <label {...labelProps}>{label}</label>
+      <label {...labelProps} id={labelledById}>
+        {label}
+      </label>
       {React.cloneElement(
         // @ts-ignore
         children,
-        { "aria-labelledby": labelledById }
+        {
+          ...otherProps,
+          "aria-labelledby": labelledById,
+          id: `${childId} ${
+            "id" in otherProps ? (otherProps as { id: string }) : ""
+          }`
+        }
       )}
     </React.Fragment>
   );

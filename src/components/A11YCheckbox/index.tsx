@@ -10,6 +10,17 @@ interface IProps
   onClick: () => void;
 }
 
+export const A11YCheckmark = ({
+  className,
+  ...restProps
+}: React.HTMLAttributes<HTMLSpanElement>) => (
+  <span
+    aria-hidden
+    {...restProps}
+    className={`${style.Check} ${className ? className : ""}`}
+  />
+);
+
 const A11YCheckbox = (props: IProps) => (
   <div
     {...props}
@@ -20,7 +31,9 @@ const A11YCheckbox = (props: IProps) => (
     className={`${style.Checkbox} ${props.checked ? style.checked : ""} ${
       props.className
     }`}
-  ></div>
+  >
+    {props.checked && (props.children || <A11YCheckmark />)}
+  </div>
 );
 
 export default A11YCheckbox;
